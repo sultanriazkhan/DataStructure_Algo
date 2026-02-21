@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Search Visualizer — Apple Inspired</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Apple-style card */
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1a1a1a, #434343);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* Apple-style input */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1d1d1f;
+            display: block;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.2px;
+        }
+
+        .apple-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e6e6e8;
+            border-radius: 14px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .apple-input:focus {
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.2);
+        }
+
+        /* Apple-style button */
+        .apple-button {
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 980px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            letter-spacing: -0.2px;
+        }
+
+        .apple-button:hover {
+            background: #0077ed;
+            transform: scale(1.02);
+        }
+
+        .apple-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Array display */
+        .array-container {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e6e6e8;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .array-title {
+            font-size: 0.9rem;
+            color: #86868b;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .array-content {
+            font-size: 1.2rem;
+            color: #1d1d1f;
+            word-break: break-word;
+        }
+
+        .array-content span {
+            display: inline-block;
+            background: #f5f5f7;
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+            margin: 0.2rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Result banner */
+        .result-banner {
+            background: linear-gradient(135deg, #f5f5f7, #ffffff);
+            border-radius: 18px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #0071e3;
+            animation: slideLeft 0.5s ease-out;
+        }
+
+        .result-found {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #1d1d1f;
+        }
+
+        .result-found span {
+            color: #0071e3;
+            font-weight: 600;
+        }
+
+        .result-not-found {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #ff3b30;
+        }
+
+        /* Trace steps */
+        .trace-container {
+            margin-top: 2rem;
+        }
+
+        .trace-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 1rem;
+        }
+
+        .trace-steps {
+            list-style: none;
+        }
+
+        .trace-step {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.8rem;
+            border: 1px solid #e6e6e8;
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .trace-step:nth-child(1) { animation-delay: 0.1s; }
+        .trace-step:nth-child(2) { animation-delay: 0.2s; }
+        .trace-step:nth-child(3) { animation-delay: 0.3s; }
+        .trace-step:nth-child(4) { animation-delay: 0.4s; }
+        .trace-step:nth-child(5) { animation-delay: 0.5s; }
+
+        .trace-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .iteration-badge {
+            background: #0071e3;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 980px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .trace-message {
+            font-size: 1rem;
+            color: #1d1d1f;
+        }
+
+        .trace-indices {
+            font-size: 0.9rem;
+            color: #86868b;
+            margin-top: 0.5rem;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+
+        .value-highlight {
+            color: #0071e3;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .result-found, .result-not-found {
+                font-size: 1.1rem;
+            }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .searching {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Binary Search Visualizer</h2>
+            
+            <form method="POST" action="/search">
+                <div class="input-group">
+                    <label>Array (comma separated)</label>
+                    <input type="text" name="array" class="apple-input" placeholder="e.g., 2,3,4,5,6,7,8,12,56,78,89" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Target</label>
+                    <input type="number" name="target" class="apple-input" placeholder="Enter number to search" required>
+                </div>
+
+                <button type="submit" class="apple-button">Start Search</button>
+            </form>
+        </div>
+
+        {% if arr %}
+        <div class="card" style="animation: slideUp 0.5s ease-out;">
+            <div class="array-container">
+                <div class="array-title">Sorted Array</div>
+                <div class="array-content">
+                    {% for num in arr %}
+                        {% if num == target %}
+                            <span style="background: #0071e3; color: white;">{{ num }}</span>
+                        {% else %}
+                            <span>{{ num }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if result is not none %}
+            <div class="result-banner">
+                {% if result != -1 %}
+                    <div class="result-found">
+                        ✦ Target <span>{{ target }}</span> found at index <span>{{ result }}</span>
+                    </div>
+                {% else %}
+                    <div class="result-not-found">
+                        ✦ Target {{ target }} not found in array
+                        {% if trace and trace[-1].message %}
+                            <div style="font-size: 0.9rem; color: #86868b; margin-top: 0.5rem;">
+                                {{ trace[-1].message }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if trace %}
+            <div class="trace-container">
+                <div class="trace-title">Execution Trace</div>
+                <ul class="trace-steps">{% for step in trace %}
+                    <li class="trace-step">
+                        <div class="trace-header">
+                            <span class="iteration-badge">Iteration {{ step.iteration }}</span>
+                        </div>
+                        <div class="trace-message">{{ step.message }}</div>
+                        {% if step.low is defined %}
+                        <div class="trace-indices">
+                            low = <span class="value-highlight">{{ step.low }}</span> | 
+                            mid = <span class="value-highlight">{{ step.mid }}</span> | 
+                            high = <span class="value-highlight">{{ step.high }}</span>
+                            {% if step.value is defined %}
+                            | value = <span class="value-highlight">{{ step.value }}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}</ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
